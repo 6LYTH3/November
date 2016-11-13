@@ -1,6 +1,7 @@
 package main
 
 import (
+	controller "./controller"
 	user "./model/user"
 	"encoding/json"
 	"fmt"
@@ -31,9 +32,12 @@ func UserHandler(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 func main() {
 	log.Printf("Come on baby, I'm listening you on port 8080!")
 
+	uc := controller.NewUserController()
+
 	r := httprouter.New()
 	// A handler
 	r.GET("/", handler)
 	r.GET("/user/:id", UserHandler)
+	r.GET("/xxx/:id", uc.GetUser)
 	http.ListenAndServe(":8080", r)
 }
