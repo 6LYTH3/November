@@ -1,12 +1,12 @@
 package route
 
 import (
-  controller "../controller"
-  user "../model/user"
-  "encoding/json"
-  "fmt"
-  "github.com/julienschmidt/httprouter"
-  "net/http"
+	controller "../controller"
+	user "../model/user"
+	"encoding/json"
+	"fmt"
+	"github.com/julienschmidt/httprouter"
+	"net/http"
 )
 
 func handler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -28,15 +28,16 @@ func UserHandler(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	fmt.Fprintf(w, "%s", uj)
 }
 
+func Load() *httprouter.Router {
+	uc := controller.NewUserController()
 
-func Load() *httprouter.Router  {
-  uc := controller.NewUserController()
+	r := httprouter.New()
+	// A handler
+	r.GET("/", handler)
+	r.GET("/user/:id", UserHandler)
+	r.GET("/xxx/:id", uc.GetUser)
+	r.GET("/adduser/:id", uc.AddUser)
+	r.GET("/getalluser", uc.GetAllUser)
 
-  r := httprouter.New()
-  // A handler
-  r.GET("/", handler)
-  r.GET("/user/:id", UserHandler)
-  r.GET("/xxx/:id", uc.GetUser)
-
-  return r
+	return r
 }
